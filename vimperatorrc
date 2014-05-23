@@ -1,0 +1,97 @@
+" ~/.vimperatorrc | vi: set ft=vimperator: | Curtis Free (http://curtisfree.com)
+
+" Miscellaneous
+set history=50
+"" vertical bar CANNOT be used here
+set urlseparator=;
+
+" Awesome Bar
+"" See http://developernotes.com/archive/2008/09/22/vimperator-tip-awesome-bar.aspx.
+"" Additional 's' option gives initial suggestion of search engine but (mistakenly?)
+"" enables suggestions (which should only occur given 'S'). Useful, but I'll favor
+"" privacy/security and just use 'l' here.
+set complete=l
+
+" Scrolling
+"" Vimperator does not give the user direct control over scroll distance. Vimium (for
+"" Chromium/Google Chrome) uses a nice 60px by default; 2<dir> is much smaller, but it
+"" feels better in Vimperator.
+nnoremap j 3j
+nnoremap k 3k
+nnoremap h 3h
+nnoremap l 3l
+
+" Display
+"" show only the tab bar
+set gui=tabs
+"" see http://code.google.com/p/vimperator-labs/issues/detail?id=311
+set popups=tab,resized
+
+" Find
+"" perform incremental searching
+set incsearch
+"" highlight search results
+set hlsearch
+"" typically (see below) ignore case
+set ignorecase
+"" only consider case if an upper case char is used
+set smartcase
+
+" Maps
+"" Note: Since about Vimperator 2.2, one must use S-char (shift+char) instead of CHAR (uppercase).
+""" Stop
+map <Esc> <C-c>
+map x d
+""" Site Opening
+map  <C-l> o
+imap <C-l> <Esc>o
+map  <C-S-l> t
+imap <C-S-l> <Esc>t
+map  <C-e> O
+imap <C-e> <Esc>O
+""" Navigation
+map < H
+map > L
+""" Searching (Google)
+map  <C-k> ogoogle<Space>
+imap <C-k> <Esc>ogoogle<Space>
+map  <C-S-k> tgoogle<Space>
+imap <C-S-k> <Esc>tgoogle<Space>
+""" Firefox Dialogs
+"""" Downloads
+noremap  <C-j> <C-t>:downloads<CR>
+inoremap <C-j> <Esc><C-t>:downloads<CR>
+cnoremap <C-j> <C-t>:downloads<CR>
+""" Tabs
+"""" Modified Firefox Hotkey(s)
+noremap  <C-t> <C-t>o
+inoremap <C-t> <C-t>o
+"""" GNU Screen-like Tabs
+""""" NOTE: These interfere with Vimperator's default <C-a> functionality.
+"""""       See `:h <C-a>`.
+"map <C-a>c <C-t>
+"map <C-a>n <C-Tab>
+"map <C-a>p <S-C-Tab>
+"map <C-a>k d
+"""" (Custom) Vim-like Tabs
+""""" See http://dailyvim.blogspot.com/2008/11/tabs.html.
+map ,to <C-t>
+map ,tf t
+map ,tc d
+map ,tn <C-Tab>
+map ,tp <S-C-Tab>
+""" Mode Overrides
+"""" Insert Mode
+imap <C-t> <Esc><C-t>
+imap <C-w> <Esc><C-w>
+"""" Command Mode
+cmap <C-k> <Esc><C-k>
+cmap <C-l> <Esc><C-l>
+cmap <C-t> <Esc><C-t>
+
+" Style
+"" See http://bbs.archlinux.org/viewtopic.php?id=69123
+"" See http://github.com/VoQn/vimperator-colorscheme/raw/e13afec1be5ec1c9de775d0e2a464862f8d3a453/colors/default.vimp
+hi CompItem  font-size: 12px;
+hi CompTitle color: magenta; font-weight: bold; font-size: 12px;
+
