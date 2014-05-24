@@ -103,6 +103,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 # A few grep search functions.
+# TODO(mkayyash): Make it more generic.
 cs_gen ()
 {
   grep -rl "$1" . 2>/dev/null
