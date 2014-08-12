@@ -148,3 +148,4 @@ alias h='history | grep'
 
 alias all_pkg='dpkg --get-selections | grep -v deinstall'
 alias more='less '
+alias rswap='rm .*.swp;rm .*.swn;rm .*.swo'
