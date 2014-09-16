@@ -36,6 +36,9 @@ match ErrorMsg '\s\+$'
 " Remove trailing whitespaces"
 nnoremap <Leader>rtw :%s/\s\+$//e<CR>
 
+" Treat all numbers as decimals.
+set nrformats=
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
