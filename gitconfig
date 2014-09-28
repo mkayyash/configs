@@ -1,0 +1,7 @@
+[color]
+	ui = auto
+[user]
+	name = Mohamad Ayyash
+	email = mkayyash@gmail.com
+[core]
+	excludesfile = /home/mkayyash/.gitignore
