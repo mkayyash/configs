@@ -102,6 +102,9 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
+export EDITOR=vim
+export VISUAL=$EDITOR
+
 # A few grep search functions.
 # TODO(mkayyash): Make it more generic.
 cs_gen ()
