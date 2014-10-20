@@ -136,7 +136,7 @@ function rand() {
 
 function nice_rm() {
     local dir=$1
-    local newdir=$(rand 30)
+    local newdir=.$(rand 30)
     mv $dir $newdir
     rm -rf $newdir &
 }
