@@ -343,3 +343,12 @@ function! <SID>BufcloseCloseIt()
      execute("bdelete! ".l:currentBufNum)
    endif
 endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugin related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Pathogen init
+execute pathogen#infect()
+syntax on
+filetype plugin indent on
