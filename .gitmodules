@@ -1,3 +1,6 @@
 [submodule "vimplugins/vim-pathogen"]
 	path = vimplugins/vim-pathogen
 	url = https://github.com/tpope/vim-pathogen.git
+[submodule "vimplugins/nerdtree"]
+	path = vimplugins/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
