@@ -1,5 +1,9 @@
 #!/bin/bash
+# Run first time to initialize the vim bundles. Preferably rm -rf ~/.vim before
+# invoking the script.
+
 conf_dir=$1
+
 if [ ! -d "$1" ]; then
     conf_dir=~/src/configs
 fi
