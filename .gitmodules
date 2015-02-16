@@ -4,3 +4,6 @@
 [submodule "vimplugins/nerdtree"]
 	path = vimplugins/nerdtree
 	url = https://github.com/scrooloose/nerdtree.git
+[submodule "vimplugins/cscope_macros.vim"]
+	path = vimplugins/cscope_macros.vim
+	url = https://github.com/vim-scripts/cscope_macros.vim.git
