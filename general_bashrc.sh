@@ -146,6 +146,18 @@ function ker_details() {
     dd if=$file bs=1 skip=$(LC_ALL=C grep -a -b -o $'\x1f\x8b\x08\x00\x00\x00\x00\x00' $file | cut -d ':' -f 1) | zgrep -a 'Linux version'
 }
 
+function alladb() {
+    x=`adb devices | grep  device$ | awk '{print $1}' `
+
+    for i in $x; do
+        echo "==========="
+        echo "Running adb -s $i $@"
+        echo "==========="
+        adb -s $i $@
+        echo ""
+    done
+}
+
 alias fd='find . 2>/dev/null | grep '
 alias h='history | grep'
 
@@ -153,3 +165,4 @@ alias all_pkg='dpkg --get-selections | grep -v deinstall'
 alias more='less '
 alias rswap='rm .*.swp;rm .*.swn;rm .*.swo'
 alias genj_jar='rm src/j.jar; rm src/com/dogcows/*.class ;  javac -cp ".:ContestApplet.jar" src/com/dogcows/Editor.java src/com/dogcows/VimCoder.java src/com/dogcows/Util.java ; cd src/ ; jar cf j.jar com ; cd ..'
+alias sbash='source ~/.bashrc'
