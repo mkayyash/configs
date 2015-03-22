@@ -1,9 +1,9 @@
 [color]
-	ui = auto
+    ui = auto
 [merge]
     tool = mymeld
     conflictstyle = diff3
 [mergetool "mymeld"]
     cmd = meld --diff $BASE $LOCAL --diff $BASE $REMOTE --auto-merge $LOCAL $BASE $REMOTE --output $MERGED
 [push]
-	default = simple
+    default = simple
