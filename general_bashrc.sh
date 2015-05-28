@@ -166,3 +166,4 @@ alias more='less '
 alias rswap='rm .*.swp;rm .*.swn;rm .*.swo'
 alias genj_jar='rm src/j.jar; rm src/com/dogcows/*.class ;  javac -cp ".:ContestApplet.jar" src/com/dogcows/Editor.java src/com/dogcows/VimCoder.java src/com/dogcows/Util.java ; cd src/ ; jar cf j.jar com ; cd ..'
 alias sbash='source ~/.bashrc'
+alias pgit="git log --color --graph --pretty=format:'%Cred%h%Creset %Cblue%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%Creset' --abbrev-commit"
