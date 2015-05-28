@@ -284,6 +284,9 @@ map <leader>pp :setlocal paste!<cr>
 " Remap jj to escape in insert mode.
 inoremap jj <Esc>
 
+" Count search instances
+map <Leader>o :%s///n<CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
