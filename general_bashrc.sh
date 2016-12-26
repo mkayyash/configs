@@ -56,10 +56,18 @@ function alladb() {
 
 alias fd='find . 2>/dev/null | grep '
 alias h='history | grep'
+alias en="vim ~/Notes"
 
 alias all_pkg='dpkg --get-selections | grep -v deinstall'
 alias more='less '
 alias rswap='rm .*.swp;rm .*.swn;rm .*.swo'
 alias genj_jar='rm src/j.jar; rm src/com/dogcows/*.class ;  javac -cp ".:ContestApplet.jar" src/com/dogcows/Editor.java src/com/dogcows/VimCoder.java src/com/dogcows/Util.java ; cd src/ ; jar cf j.jar com ; cd ..'
-alias sbash='source ~/.bashrc'
+
+if [ "$uname" == "Darwin" ]
+then
+    alias sbash='source ~/.bash_profile'
+else
+    alias sbash='source ~/.bashrc'
+fi
+
 alias pgit="git log --color --graph --pretty=format:'%Cred%h%Creset %Cblue%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%Creset' --abbrev-commit"
