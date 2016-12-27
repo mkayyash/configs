@@ -1,5 +1,7 @@
-# INCLUDE IN ~/.bashrc by appending the following line to that file:
-# source <PATH>/general_bashrc.sh
+#!/bin/bash
+# INCLUDE IN ~/.bashrc (linux) or ~/.bash_profile (darwin) by
+# appending the following line to that file:
+# source <PATH>/configs/general_bashrc.sh
 
 # A few grep search functions.
 # TODO(mkayyash): Make it more generic.
@@ -63,11 +65,18 @@ alias more='less '
 alias rswap='rm .*.swp;rm .*.swn;rm .*.swo'
 alias genj_jar='rm src/j.jar; rm src/com/dogcows/*.class ;  javac -cp ".:ContestApplet.jar" src/com/dogcows/Editor.java src/com/dogcows/VimCoder.java src/com/dogcows/Util.java ; cd src/ ; jar cf j.jar com ; cd ..'
 
-if [ "$uname" == "Darwin" ]
+alias pgit="git log --color --graph --pretty=format:'%Cred%h%Creset %Cblue%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%Creset' --abbrev-commit"
+
+if [ $("uname") == "Darwin" ]
 then
     alias sbash='source ~/.bash_profile'
+    alias ack-grep="ack"
+    # make bash completion work (e.g. for git).
+    # Note must setup first via: brew install git bash-completion
+    if [ -f $(brew --prefix)/etc/bash_completion ]; then
+        . $(brew --prefix)/etc/bash_completion
+    fi
 else
     alias sbash='source ~/.bashrc'
 fi
 
-alias pgit="git log --color --graph --pretty=format:'%Cred%h%Creset %Cblue%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%Creset' --abbrev-commit"
