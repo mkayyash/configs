@@ -7,3 +7,6 @@
 [submodule "vimplugins/cscope_macros.vim"]
 	path = vimplugins/cscope_macros.vim
 	url = https://github.com/vim-scripts/cscope_macros.vim.git
+[submodule "vimplugins/tagbar"]
+	path = vimplugins/tagbar
+	url = git://github.com/majutsushi/tagbar

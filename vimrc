@@ -355,3 +355,5 @@ endfunction
 execute pathogen#infect()
 syntax on
 filetype plugin indent on
+
+nmap <leader>tt :TagbarToggle<CR>
