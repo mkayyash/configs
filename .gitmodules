@@ -10,3 +10,6 @@
 [submodule "vimplugins/tagbar"]
 	path = vimplugins/tagbar
 	url = git://github.com/majutsushi/tagbar
+[submodule "vimplugins/ycm"]
+	path = vimplugins/ycm
+	url = https://github.com/Valloric/YouCompleteMe.git
