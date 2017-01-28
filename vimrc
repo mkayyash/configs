@@ -361,11 +361,19 @@ nnoremap <C-\> :YcmCompleter GoToReferences<CR>
 "let g:ycm_python_binary_path = '/usr/local/bin/python3'
 let g:ycm_auto_trigger = 1
 let g:ycm_add_preview_to_completeopt = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_autoclose_preview_window_after_insertion = 0
 let g:ycm_extra_conf_globlist = ['~/src/*','!~/*']
 
+set pumheight=15
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Plugin related
+" => Command-T Related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <silent> <Leader>f <Plug>(CommandT)
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugin Related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Pathogen init

@@ -13,3 +13,6 @@
 [submodule "vimplugins/ycm"]
 	path = vimplugins/ycm
 	url = https://github.com/Valloric/YouCompleteMe.git
+[submodule "vimplugins/command-t"]
+	path = vimplugins/command-t
+	url = https://github.com/wincent/command-t.git
