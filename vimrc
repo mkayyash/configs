@@ -267,8 +267,8 @@ map <leader>sa zg
 " Remove the Windows ^M - when the encodings gets messed up
 noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
-" Quickly open a buffer for scripbble
-map <leader>q :e ~/buffer<cr>
+" Close window
+map <leader>q :q<cr>
 
 " Toggle paste mode on and off
 map <leader>pp :setlocal paste!<cr>
@@ -279,12 +279,27 @@ inoremap jj <Esc>
 " Count search instances
 map <Leader>o :%s///n<CR>
 
-" Control toggling the tagbar
-nmap <leader>tt :TagbarToggle<CR>
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! PreviewWindowOpened()
+    for nr in range(1, winnr('$'))
+        if getwinvar(nr, "&pvw") == 1
+            " found a preview
+            return 1
+        endif  
+    endfor
+    return 0
+endfunction
+
+function! TogglePreviewWindow()
+    if PreviewWindowOpened()
+        execute ":pclose"
+    else
+        execute ":YcmCompleter GetDoc"
+    endif
+endfunction
+
 function! CmdLine(str)
     exe "menu Foo.Bar :" . a:str
     emenu Foo.Bar
@@ -349,12 +364,16 @@ endfunction
 " Keys for Definition and Reference identifier lookup
 nnoremap <C-]> :YcmCompleter GoTo<CR>
 nnoremap <C-\> :YcmCompleter GoToReferences<CR>
+nnoremap <leader>d :call TogglePreviewWindow()<CR>
 
 "let g:ycm_python_binary_path = '/usr/local/bin/python3'
 let g:ycm_auto_trigger = 1
+set completeopt-=preview
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_insertion = 0
 let g:ycm_extra_conf_globlist = ['~/src/*','!~/*']
+set splitbelow
+set splitright
 
 set pumheight=15
 
@@ -363,6 +382,21 @@ set pumheight=15
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <silent> <Leader>f <Plug>(CommandT)
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Tagbar related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Control toggling the tagbar
+nmap <leader>tt :TagbarToggle<CR>
+let g:tagbar_sort = 0
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Snippets Related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugin Related
