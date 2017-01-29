@@ -22,14 +22,20 @@ whereby the solution is to pass the python libraries to cmake via
 '-DPYTHON_LIBRARY=/usr/local/Frameworks/Python.framework/Python'. Anyways here are
 the instructions that have worked previously with my configuration:
 
-   cd ~/.vim/bundles/ycm
-   ./install.py --clang-completer --tern-completer
-   cmake -G "Unix Makefiles" -DPATH_TO_LLVM_ROOT=/usr/local/opt/llvm/ -DPYTHON_INCLUDE_DIR=/usr/local/Frameworks/Python.framework/Headers -DPYTHON_LIBRARY=/usr/local/Frameworks/Python.framework/Python . ~/.vim/bundle/ycm/third_party/ycmd/cpp/
-   sudo cmake --build . --target ycm_core --config Release
-   cd third_party/ycmd/third_party/tern_runtime
-   npm install --production
-   cd -
-   cd ~/src/
-   ln -s /Users/mkayyash/.vim/bundle/ycm/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py .
-   cd configs
-   ln -s ~/src/configs/tern-project ~/src/.tern-project
+       cd ~/.vim/bundles/ycm
+       ./install.py --clang-completer --tern-completer
+       cmake -G "Unix Makefiles" -DPATH_TO_LLVM_ROOT=/usr/local/opt/llvm/ -DPYTHON_INCLUDE_DIR=/usr/local/Frameworks/Python.framework/Headers -DPYTHON_LIBRARY=/usr/local/Frameworks/Python.framework/Python . ~/.vim/bundle/ycm/third_party/ycmd/cpp/
+       sudo cmake --build . --target ycm_core --config Release
+       cd third_party/ycmd/third_party/tern_runtime
+       npm install --production
+       cd -
+       cd ~/src/
+       ln -s /Users/mkayyash/.vim/bundle/ycm/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py .
+       cd configs
+       ln -s ~/src/configs/tern-project ~/src/.tern-project
+
+4) Command-T won't work unless you build the extension. Also make sure system ruby and vim ruby are the same version, then run the following:  
+
+      cd ~/.vim/bundle/command-t/ruby/command-t
+      ruby extconf.rb
+      make
