@@ -28,6 +28,6 @@
 [submodule "vimplugins/ack.vim"]
 	path = vimplugins/ack.vim
 	url = https://github.com/mileszs/ack.vim.git
-[submodule "vimplugins/vim-powerline"]
-	path = vimplugins/vim-powerline
-	url = git://github.com/Lokaltog/vim-powerline.git
+[submodule "vimplugins/vim-airline"]
+	path = vimplugins/vim-airline
+	url = https://github.com/vim-airline/vim-airline.git
