@@ -79,4 +79,3 @@ then
 else
     alias sbash='source ~/.bashrc'
 fi
-

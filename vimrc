@@ -3,10 +3,9 @@
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Sets how many lines of history VIM has to remember
-set history=700
+set history=1000
 
 " Enable filetype plugins
-
 filetype plugin on
 filetype indent on
 
@@ -20,6 +19,9 @@ let g:mapleader = ","
 
 " Fast saving
 nmap <leader>w :w!<cr>
+
+" Close window
+nmap <leader>q :q<cr>
 
 " Enable syntax highlight.
 syntax on
@@ -47,7 +49,7 @@ set wildmenu
 set wildmode=list:longest,full
 
 " Ignore compiled files
-set wildignore=*.o,*.so,*~,*.pyc
+set wildignore=*.o,*.so,*~,*.pyc,*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 
 "Always show current position
 set ruler
@@ -133,6 +135,15 @@ set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
 
+" Change default tab settings based on file extension
+augroup FileTypeTabRules
+    autocmd!
+    autocmd BufRead,BufNewFile *.pug,*.jade setlocal tabstop=2 shiftwidth=2
+augroup END
+
+" Red highlight >80 character lines
+augroup FileTypeLengthRules
+    autocmd BufWinEnter *.js,*.pug,*.jade let w:m1=matchadd('ErrorMsg', '\%>80v.\+', -1)
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
@@ -141,7 +152,6 @@ set wrap "Wrap lines
 " Super useful! From an idea by Michael Naumann
 vnoremap <silent> * :call VisualSelection('f')<CR>
 vnoremap <silent> # :call VisualSelection('b')<CR>
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Moving around, tabs, windows and buffers
@@ -188,7 +198,6 @@ autocmd BufReadPost *
 " Remember info about open buffers on close
 set viminfo^=%
 
-
 """"""""""""""""""""""""""""""
 " => Status line
 """"""""""""""""""""""""""""""
@@ -205,10 +214,10 @@ set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ %r%{getcwd()}%h\ %w\ \(%l,%c\)
 map 0 ^
 
 " Move a line of text using CTRL+[jk] in visual mode
-vmap <C-j> :m'>+<cr>`<my`>mzgv`yo`z
-vmap <C-k> :m'<-2<cr>`>my`<mzgv`yo`z
+"vmap <C-j> :m'>+<cr>`<my`>mzgv`yo`z
+"vmap <C-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
-" Delete trailing white space on save, useful for Python and CoffeeScript ;)
+" Delete trailing white space on save, useful for Python and CoffeeScript
 func! DeleteTrailingWS()
   exe "normal mz"
   %s/\s\+$//ge
@@ -267,9 +276,6 @@ map <leader>sa zg
 " Remove the Windows ^M - when the encodings gets messed up
 noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
-" Close window
-map <leader>q :q<cr>
-
 " Toggle paste mode on and off
 map <leader>pp :setlocal paste!<cr>
 
@@ -287,7 +293,7 @@ function! PreviewWindowOpened()
         if getwinvar(nr, "&pvw") == 1
             " found a preview
             return 1
-        endif  
+        endif
     endfor
     return 0
 endfunction
@@ -358,7 +364,7 @@ function! <SID>BufcloseCloseIt()
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => YCM Plugin Related
+" => Autocomplete and YCM Plugin Related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Keys for Definition and Reference identifier lookup
@@ -369,19 +375,29 @@ nnoremap <leader>d :call TogglePreviewWindow()<CR>
 "let g:ycm_python_binary_path = '/usr/local/bin/python3'
 let g:ycm_auto_trigger = 1
 set completeopt-=preview
-let g:ycm_add_preview_to_completeopt = 1
-let g:ycm_autoclose_preview_window_after_insertion = 0
-let g:ycm_extra_conf_globlist = ['~/src/*','!~/*']
-set splitbelow
-set splitright
+"let g:ycm_add_preview_to_completeopt = 1
+"let g:ycm_autoclose_preview_window_after_insertion = 1
+"let g:ycm_extra_conf_globlist = ['~/src/*','!~/*']
+"set splitbelow
+"set splitright
 
 set pumheight=15
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Command-T Related
+" => NERDTree Related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <silent> <Leader>ee :NERDTreeToggle<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Command-T and File Lookup Related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <silent> <Leader>f <Plug>(CommandT)
 
+augroup CommandTExtension
+    autocmd!
+    autocmd FocusGained * CommandTFlush
+    autocmd BufWritePost * CommandTFlush
+augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Tagbar related
@@ -399,11 +415,10 @@ let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Plugin Related
+" => Plugin Manager Related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Pathogen init
 execute pathogen#infect()
 syntax on
 filetype plugin indent on
-
