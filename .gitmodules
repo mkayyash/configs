@@ -34,3 +34,6 @@
 [submodule "vimplugins/vim-indentwise"]
 	path = vimplugins/vim-indentwise
 	url = https://github.com/jeetsukumaran/vim-indentwise.git
+[submodule "vimplugins/vim-abolish"]
+	path = vimplugins/vim-abolish
+	url = https://github.com/tpope/vim-abolish.git

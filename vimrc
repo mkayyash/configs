@@ -17,6 +17,9 @@ set autoread
 let mapleader = ","
 let g:mapleader = ","
 
+" Preserve reverse character search with \
+noremap \ ,
+
 " Fast saving
 nmap <leader>w :w!<cr>
 
