@@ -256,7 +256,8 @@ vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
 " To go to the previous search results do:
 "   <leader>p
 "
-map <leader>cc :botright cope<cr>
+"OBSOLETED with ListToggle Plugin
+"map <leader>cc :call ToggleQuickFixWindow()<cr>
 map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
 map <leader>n :cn<cr>
 map <leader>p :cp<cr>
@@ -277,7 +278,7 @@ map <leader>sa zg
 " => Misc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Remove the Windows ^M - when the encodings gets messed up
-noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+"noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " Toggle paste mode on and off
 map <leader>pp :setlocal paste!<cr>
@@ -291,6 +292,17 @@ map <Leader>o :%s///n<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! QuickFixWindowOpened()
+    for nr in range(1, winnr('$'))
+        let bnum = winbufnr(nr)
+        if getbufvar(bnum, '&buftype') == 'quickfix'
+            " found a quickfix
+            return 1
+        endif
+    endfor
+    return 0
+endfunction
+
 function! PreviewWindowOpened()
     for nr in range(1, winnr('$'))
         if getwinvar(nr, "&pvw") == 1
@@ -301,12 +313,32 @@ function! PreviewWindowOpened()
     return 0
 endfunction
 
+function! ToggleQuickFixWindow()
+    if QuickFixWindowOpened()
+        execute ":ccl"
+    else
+        execute ":botright copen"
+    endif
+endfunction
+
 function! TogglePreviewWindow()
     if PreviewWindowOpened()
         execute ":pclose"
     else
         execute ":YcmCompleter GetDoc"
     endif
+endfunction
+
+" Enables/Disables Syntastic highlights by checking for signs in buffer
+function! ToggleSyntastic()
+   let l:currentBufNum = bufnr("%")
+
+   let l:res = execute(":sign place buffer=".l:currentBufNum)
+   if l:res =~"Signs for"
+       execute ":SyntasticReset"
+   else
+       execute ":SyntasticCheck"
+   endif
 endfunction
 
 function! CmdLine(str)
@@ -366,6 +398,15 @@ function! <SID>BufcloseCloseIt()
    endif
 endfunction
 
+command! -nargs=0 -bar Qargs execute 'args' QuickfixFilenames()
+function! QuickfixFilenames()
+    let buffer_numbers = {}
+    for quickfix_item in getqflist()
+        let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
+    endfor
+    return join(map(values(buffer_numbers), 'fnameescape(v:val)'))
+endfunction
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Autocomplete and YCM Plugin Related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -416,6 +457,33 @@ let g:tagbar_sort = 0
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => ListToggle Related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:lt_location_list_toggle_map = '<leader>ll'
+let g:lt_quickfix_list_toggle_map = '<leader>cc'
+"let g:lt_height = 10
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Syntastic Related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Common settings
+"let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" JS specific settings
+let g:syntastic_javascript_checkers=['eslint']
+
+" Set make to call "npm run lintall" for js projects only
+augroup LintAllForNodeJs
+    autocmd FileType javascript setlocal errorformat=%f:\ line\ %l\\,\ col\ %c\\,\ %trror\ -\ %m,\%f:\ line\ %l\\,\ col\ %c\\,\ %tarning\ -\ %m,\%-G%.%#
+    autocmd FileType javascript setlocal makeprg=npm\ run\ lintall\ -s\
+
+autocmd VimEnter * silent! SyntasticToggleMode
+map <leader>m :call ToggleSyntastic()<CR>
+"map <leader>m :SyntasticCheck<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugin Manager Related
