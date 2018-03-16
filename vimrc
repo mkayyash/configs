@@ -244,6 +244,7 @@ map <leader><space> :vimgrep // <C-R>%<C-A><right><right><right><right><right><r
 
 " When you press <leader>r you can search and replace the selected text
 vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
+vnoremap <silent> <leader>R :call VisualSelection('replaceSubvert')<CR>
 
 " Do :help cope if you are unsure what cope is. It's super useful!
 "
@@ -360,6 +361,8 @@ function! VisualSelection(direction) range
         call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*')
     elseif a:direction == 'replace'
         call CmdLine("%s" . '/'. l:pattern . '/')
+    elseif a:direction == 'replaceSubvert'
+        call CmdLine("%S" . '/'. l:pattern . '/')
     elseif a:direction == 'f'
         execute "normal /" . l:pattern . "^M"
     endif
@@ -414,7 +417,7 @@ endfunction
 " Keys for Definition and Reference identifier lookup
 nnoremap <C-]> :YcmCompleter GoTo<CR>
 nnoremap <C-\> :YcmCompleter GoToReferences<CR>
-nnoremap <leader>d :call TogglePreviewWindow()<CR>
+nnoremap <silent> <leader>d :call TogglePreviewWindow()<CR>
 
 "let g:ycm_python_binary_path = '/usr/local/bin/python3'
 let g:ycm_auto_trigger = 1
@@ -448,7 +451,7 @@ augroup END
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Control toggling the tagbar
-nmap <leader>tt :TagbarToggle<CR>
+nmap <silent> <leader>tt :TagbarToggle<CR>
 let g:tagbar_sort = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -482,7 +485,7 @@ augroup LintAllForNodeJs
     autocmd FileType javascript setlocal makeprg=npm\ run\ lintall\ -s\
 
 autocmd VimEnter * silent! SyntasticToggleMode
-map <leader>m :call ToggleSyntastic()<CR>
+map <silent> <leader>mm :call ToggleSyntastic()<CR>
 "map <leader>m :SyntasticCheck<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
