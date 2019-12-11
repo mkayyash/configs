@@ -1,5 +1,63 @@
 " Modified from https://github.com/amix/vimrc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugin Manager Related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+packadd minpac
+call minpac#init()
+command! PackUpdate call minpac#update()
+command! PackClean call minpac#clean()
+" Pathogen init
+"execute pathogen#infect()
+"syntax on
+"filetype plugin indent on
+
+" The main vim package manager
+call minpac#add('k-takata/minpac')
+"For toggling the display of the quickfix list and the location-list
+call minpac#add('Valloric/ListToggle')
+" Running ack grep search
+call minpac#add('mileszs/ack.vim')
+" Filesystem navigation
+" Must install ruby on system and must compile and make ruby package of bundle
+" Follow :h command-t for installation instructions
+call minpac#add('wincent/command-t')
+" Nice vim footer
+call minpac#add('bling/vim-airline')
+" Advanced directory explorer
+call minpac#add('scrooloose/nerdtree')
+" Universal Ctags (good support for js ES6)
+call minpac#add('universal-ctags/ctags')
+" Syntax checking in vim
+call minpac#add('vim-syntastic/syntastic')
+" Nice ctag explorer for each file
+" Must install universal-ctags on system
+" brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+call minpac#add('majutsushi/tagbar')
+" Phrase related utils. Maily the advanced :S/Pattern/NewPattern/g
+call minpac#add('tpope/vim-abolish')
+" Command line git wrapper
+call minpac#add('tpope/vim-fugitive')
+" I use it for Alternate files (code & test)
+" e.g. .projections.json:
+"{
+"   \"app/models/*.js": {
+"       \"type": \"model",
+"       \"alternate": \"tests/unit/models/{}-test.js"
+"   },
+"   \"tests/unit/models/*-test.js": {
+"       \"type": \"modelTest",
+"       \"alternate": \"app/models/{}.js"
+"   },
+"}
+" Run :A to jump to a file's alternate
+call minpac#add('tpope/vim-projectionist')
+" Allows jumping around in a file based on indentation using [= for example
+call minpac#add('jeetsukumaran/vim-indentwise')
+" TODO: Need YCM or something similar to make those two work
+call minpac#add('SirVer/ultisnips')
+call minpac#add('honza/vim-snippets')
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Sets how many lines of history VIM has to remember
@@ -34,9 +92,6 @@ set tags=tags;
 
 " Shows lines selected in visual mode (and more).
 set showcmd
-
-" Highlight trailing whitespaces.
-match ErrorMsg '\s\+$'
 
 " Remove trailing whitespaces"
 nnoremap <Leader>rtw :%s/\s\+$//e<CR>
@@ -147,6 +202,15 @@ augroup END
 " Red highlight >80 character lines
 augroup FileTypeLengthRules
     autocmd BufWinEnter *.js,*.pug,*.jade let w:m1=matchadd('ErrorMsg', '\%>80v.\+', -1)
+
+" Highlight trailing whitespaces.
+"match ErrorMsg '\s\+$'
+
+augroup HighlightWhitespace
+    " Ignore whitespace on those files
+    autocmd BufWinEnter *.md,*.pug let b:md_file=1
+    " Apply whitespace on everything else
+    autocmd BufWinEnter * if ! exists('b:md_file') | let w:m1=matchadd('ErrorMsg', '\s\+$', -1) | endif
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
@@ -487,12 +551,3 @@ augroup LintAllForNodeJs
 autocmd VimEnter * silent! SyntasticToggleMode
 map <silent> <leader>mm :call ToggleSyntastic()<CR>
 "map <leader>m :SyntasticCheck<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Plugin Manager Related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Pathogen init
-execute pathogen#infect()
-syntax on
-filetype plugin indent on

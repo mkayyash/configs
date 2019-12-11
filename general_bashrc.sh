@@ -58,7 +58,7 @@ function alladb() {
 
 alias fd='find . 2>/dev/null | grep '
 alias h='history | grep'
-alias en="vim ~/Notes"
+alias en="vim ~/Notes.md"
 
 alias all_pkg='dpkg --get-selections | grep -v deinstall'
 alias more='less '
@@ -80,4 +80,17 @@ else
     alias sbash='source ~/.bashrc'
 fi
 
-export EDITOR=vim
+alias ripgrep="rg"
+
+# Use Neovim as "preferred editor"
+export EDITOR=nvim
+export VISUAL=nvim
+# Use Neovim instead of Vim or Vi
+alias vim=nvim
+alias vi=nvim
+
+#export VIMCONFIG=~/.vim
+#export VIMDATA=~/.vim
+export VIMCONFIG=~/.config/nvim
+export VIMDATA=~/.local/share/nvim
+
