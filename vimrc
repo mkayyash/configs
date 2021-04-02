@@ -37,6 +37,8 @@ call minpac#add('majutsushi/tagbar')
 call minpac#add('tpope/vim-abolish')
 " Command line git wrapper
 call minpac#add('tpope/vim-fugitive')
+" Allows commenting/uncommenting lines by \\<motion>
+call minpac#add('tpope/vim-commentary')
 " I use it for Alternate files (code & test)
 " e.g. .projections.json:
 "{
@@ -56,6 +58,18 @@ call minpac#add('jeetsukumaran/vim-indentwise')
 " TODO: Need YCM or something similar to make those two work
 call minpac#add('SirVer/ultisnips')
 call minpac#add('honza/vim-snippets')
+call minpac#add('Shougo/deoplete.nvim')
+" call minpac#add('ternjs/tern_for_vim')
+" call minpac#add('carlitux/deoplete-ternjs')
+call minpac#add('leafgarland/typescript-vim')
+call minpac#add('peitalin/vim-jsx-typescript')
+" Activates buffer navigation with [b also similarly [a, [q, [l and [t for
+" argument, quickfix, location and tag lists.
+call minpac#add('tpope/vim-unimpaired')
+
+let g:deoplete#enable_at_startup = 1
+autocmd FileType python nnoremap <leader>y :0,$!yapf<Cr>
+autocmd CompleteDone * pclose " To close preview window of deoplete automagically
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
@@ -510,6 +524,20 @@ augroup CommandTExtension
     autocmd BufWritePost * CommandTFlush
 augroup END
 
+" Use %% in command line mode to get current directory
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
+" Command line mode naviation similar to terminal
+" Refer to :h cmdline-editing for defaults
+" Type: sed -n l in command line to test keys
+" ^A   ^E      ^[b    ^[f
+cnoremap <C-A> <Home>
+cnoremap <C-E> <End>
+" TODO: For some reason since <option-left> maps to <Esc>b on mac but not here.
+" Same with <option>right.
+cnoremap <Esc>b <S-Left>
+cnoremap <Esc>f <S-Right>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Tagbar related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -551,3 +579,12 @@ augroup LintAllForNodeJs
 autocmd VimEnter * silent! SyntasticToggleMode
 map <silent> <leader>mm :call ToggleSyntastic()<CR>
 "map <leader>m :SyntasticCheck<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Navigation Related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" TODO: Make this work when there are no more levels to jump to.
+" in that case we should just do a [=
+nnoremap <silent> [[ :norm [-<CR>
+nnoremap <silent> ]] :norm ]-<CR>
