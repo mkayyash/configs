@@ -320,8 +320,11 @@ map <leader>g :vimgrep // **/*<left><left><left><left><left>
 " Vimgreps in the current file
 map <leader><space> :vimgrep // <C-R>%<C-A><right><right><right><right><right><right><right><right><right>
 
+
 " When you press <leader>r you can search and replace the selected text
-vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
+" NOTE(mkayyash): For some reason VisualSelection is no longer working.
+" vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
+vmap <leader>r "hy:%s/\<<C-r>h\>//g<left><left>
 vnoremap <silent> <leader>R :call VisualSelection('replaceSubvert')<CR>
 
 " Do :help cope if you are unsure what cope is. It's super useful!
