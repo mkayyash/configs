@@ -94,3 +94,6 @@ alias vi=nvim
 export VIMCONFIG=~/.config/nvim
 export VIMDATA=~/.local/share/nvim
 
+#Increase bash history size (default is 500 on mac)
+HISTSIZE=20000
+HISTFILESIZE=20000
