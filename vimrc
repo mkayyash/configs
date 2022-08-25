@@ -1,4 +1,4 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""
 " => Plugin Manager Related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 packadd minpac
@@ -70,10 +70,6 @@ call minpac#add('tpope/vim-unimpaired')
 " Then we ln copy the backed up coc-settings.
 " cd ~/.config/nvim/ && ln -s ~/src/configs/coc-settings.json .
 call minpac#add('neoclide/coc.nvim')
-
-let g:deoplete#enable_at_startup = 1
-autocmd FileType python nnoremap <leader>y :0,$!yapf<Cr>
-autocmd CompleteDone * pclose " To close preview window of deoplete automagically
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
@@ -313,16 +309,16 @@ autocmd BufWrite *.coffee :call DeleteTrailingWS()
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => vimgrep searching and cope displaying
+" => Ack grep searching and cope displaying
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " When you press gv you vimgrep after the selected text
 vnoremap <silent> gv :call VisualSelection('gv')<CR>
 
 " Open vimgrep and put the cursor in the right position
-map <leader>g :vimgrep // **/*<left><left><left><left><left>
+map <leader>g :Ack 
 
 " Vimgreps in the current file
-map <leader><space> :vimgrep // <C-R>%<C-A><right><right><right><right><right><right><right><right><right>
+" map <leader><space> :vimgrep // <C-R>%<C-A><right><right><right><right><right><right><right><right><right>
 
 
 " When you press <leader>r you can search and replace the selected text
@@ -498,23 +494,9 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => COC Autocomplete
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gr <Plug>(coc-references)
-
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-nnoremap <silent> <space>s :<C-u>CocList -I symbols<cr>
-
-nnoremap <silent> <space>d :<C-u>CocList diagnostics<cr>
-
-nmap <leader>do <Plug>(coc-codeaction)
-
-nmap <leader>rn <Plug>(coc-rename)
-nmap <silent> gf <Plug>(coc-fix-current)
-
 " Check the :CocConfig file for custom changes.
 let g:coc_global_extensions = [
+  \ 'coc-snippets',
   \ 'coc-tsserver',
   \ 'coc-json',
   \ 'coc-css',
@@ -606,25 +588,15 @@ augroup end
 " Example: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>do  :norm 0<leader>aj<CR>
 
 " Remap keys for applying codeAction to the current buffer.
 nmap <leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
-
+" TODO(mkayyash): These 2 doesn't work right.
+" nmap <leader>qf  <Plug>(coc-fix-current)
 " Run the Code Lens action on the current line.
-nmap <leader>cl  <Plug>(coc-codelens-action)
-
-" Map function and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
+" nmap <leader>cl  <Plug>(coc-codelens-action)
 
 " Remap <C-f> and <C-b> for scroll float windows/popups.
 if has('nvim-0.4.0') || has('patch-8.2.0750')
@@ -666,12 +638,14 @@ nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
 nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols.
 nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => NERDTree Related
