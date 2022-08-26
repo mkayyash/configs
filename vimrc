@@ -52,13 +52,13 @@ call minpac#add('tpope/vim-projectionist')
 " Allows jumping around in a file based on indentation using [= for example
 call minpac#add('jeetsukumaran/vim-indentwise')
 " TODO: Need YCM or something similar to make those two work
-call minpac#add('SirVer/ultisnips')
-call minpac#add('honza/vim-snippets')
+"call minpac#add('SirVer/ultisnips')
+"call minpac#add('honza/vim-snippets')
 "call minpac#add('Shougo/deoplete.nvim')
 " call minpac#add('ternjs/tern_for_vim')
 " call minpac#add('carlitux/deoplete-ternjs')
-call minpac#add('leafgarland/typescript-vim')
-call minpac#add('peitalin/vim-jsx-typescript')
+"call minpac#add('leafgarland/typescript-vim')
+"call minpac#add('peitalin/vim-jsx-typescript')
 " Activates buffer navigation with [b also similarly [a, [q, [l and [t for
 " argument, quickfix, location and tag lists.
 call minpac#add('tpope/vim-unimpaired')
@@ -69,7 +69,12 @@ call minpac#add('tpope/vim-unimpaired')
 " yarn install && yarn build
 " Then we ln copy the backed up coc-settings.
 " cd ~/.config/nvim/ && ln -s ~/src/configs/coc-settings.json .
+" We also copy the clangd/config.yaml file which is the global configs for
+" clangd projects.
+" ln -s ~/src/configs/clangd_config.yaml ~/.config/clangd/config.yaml
 call minpac#add('neoclide/coc.nvim')
+"TODO: make devicons work.
+"call minpac#add('ryanoasis/vim-devicons')
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
@@ -646,6 +651,13 @@ let g:coc_snippet_next = '<c-j>'
 
 " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
 let g:coc_snippet_prev = '<c-k>'
+
+" Maybe fixes the cursos from changing randomly.
+let g:coc_disable_transparent_cursor = 1
+
+" NOTE: To update the config.yaml globally or per-project do:
+" :CocCommand clangd.userConfig
+" :CocCommand clangd.projectConfig
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => NERDTree Related
