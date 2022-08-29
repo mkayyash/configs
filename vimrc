@@ -8,9 +8,12 @@ command! PackClean call minpac#clean()
 
 " The main vim package manager
 call minpac#add('k-takata/minpac')
+" Start screen
+call minpac#add('mhinz/vim-startify')
 "For toggling the display of the quickfix list and the location-list
 call minpac#add('Valloric/ListToggle')
 " Running ack grep search
+" NOTE: must install ack in system.
 call minpac#add('mileszs/ack.vim')
 " Filesystem navigation (Fuzzy finding).
 " NOTE: Must install on command line first in homebrew:
@@ -19,6 +22,7 @@ call minpac#add('mileszs/ack.vim')
 call minpac#add('junegunn/fzf')
 " Nice vim footer
 call minpac#add('vim-airline/vim-airline')
+call minpac#add('vim-airline/vim-airline-themes')
 " Advanced directory explorer
 call minpac#add('scrooloose/nerdtree')
 " Universal Ctags (good support for js ES6)
@@ -26,7 +30,7 @@ call minpac#add('universal-ctags/ctags')
 " Syntax checking in vim
 call minpac#add('vim-syntastic/syntastic')
 " Nice ctag explorer for each file
-" Must install universal-ctags on system
+" NOTE: Must install universal-ctags on system
 " brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 call minpac#add('majutsushi/tagbar')
 " Phrase related utils. Maily the advanced :S/Pattern/NewPattern/g
@@ -35,30 +39,10 @@ call minpac#add('tpope/vim-abolish')
 call minpac#add('tpope/vim-fugitive')
 " Allows commenting/uncommenting lines with gc
 call minpac#add('tpope/vim-commentary')
-" I use it for Alternate files (code & test)
-" e.g. .projections.json:
-"{
-"   \"app/models/*.js": {
-"       \"type": \"model",
-"       \"alternate": \"tests/unit/models/{}-test.js"
-"   },
-"   \"tests/unit/models/*-test.js": {
-"       \"type": \"modelTest",
-"       \"alternate": \"app/models/{}.js"
-"   },
-"}
 " Run :A to jump to a file's alternate
 call minpac#add('tpope/vim-projectionist')
 " Allows jumping around in a file based on indentation using [= for example
 call minpac#add('jeetsukumaran/vim-indentwise')
-" TODO: Need YCM or something similar to make those two work
-"call minpac#add('SirVer/ultisnips')
-"call minpac#add('honza/vim-snippets')
-"call minpac#add('Shougo/deoplete.nvim')
-" call minpac#add('ternjs/tern_for_vim')
-" call minpac#add('carlitux/deoplete-ternjs')
-"call minpac#add('leafgarland/typescript-vim')
-"call minpac#add('peitalin/vim-jsx-typescript')
 " Activates buffer navigation with [b also similarly [a, [q, [l and [t for
 " argument, quickfix, location and tag lists.
 call minpac#add('tpope/vim-unimpaired')
@@ -72,9 +56,15 @@ call minpac#add('tpope/vim-unimpaired')
 " We also copy the clangd/config.yaml file which is the global configs for
 " clangd projects.
 " ln -s ~/src/configs/clangd_config.yaml ~/.config/clangd/config.yaml
+" TODO: Make script to initialize nvim in both ubuntu and mac.
 call minpac#add('neoclide/coc.nvim')
-"TODO: make devicons work.
-"call minpac#add('ryanoasis/vim-devicons')
+" NOTE: To install, we need first a dev icon installed:
+" brew tap homebrew/cask-fonts && brew install --cask font-hack-nerd-font
+" Edit iTerm2 to make the 'Hack' font the Non-ASCII font. OR import the
+" iTerm.json profile from ~/src/configs
+call minpac#add('ryanoasis/vim-devicons')
+" vim buffet
+call minpac#add('bagrat/vim-buffet')
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
@@ -179,6 +169,7 @@ syntax enable
 
 colorscheme elflord
 set background=dark
+highlight CocFloating ctermbg=235
 
 " Set extra options when running in GUI mode
 if has("gui_running")
