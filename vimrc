@@ -764,8 +764,12 @@ if (empty($TMUX))
 endif
 
 syntax on
-colorscheme onedark
-highlight Normal ctermbg=black
 let g:airline_theme='onedark'
+"highlight Normal ctermbg=black
+let g:onedark_color_overrides = {
+\ "background": {"gui": "black", "cterm": "black", "cterm16": "0" },
+\}
+
+colorscheme onedark
 "let g:srcery_red = '#FF0000'
 "colorscheme srcery
