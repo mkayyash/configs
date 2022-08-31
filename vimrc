@@ -1,6 +1,6 @@
-"""""""""""""""""""""""""
+"""""""""""""""""""""""""""
 " => Plugin Manager Related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""
 packadd minpac
 call minpac#init()
 command! PackUpdate call minpac#update()
@@ -720,7 +720,7 @@ syntax on
 let g:airline_theme='onedark'
 let g:onedark_color_overrides = {
 \ "background": {"gui": "#050505", "cterm": "black", "cterm16": "0" },
-\ "comment_grey": {"gui": "#756c6d", "cterm": "30", "cterm16": "0" },
+\ "comment_grey": {"gui": "#448d9c", "cterm": "30", "cterm16": "0" },
 \}
 
 colorscheme onedark
