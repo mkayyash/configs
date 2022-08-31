@@ -719,8 +719,8 @@ endif
 syntax on
 let g:airline_theme='onedark'
 let g:onedark_color_overrides = {
-\ "background": {"gui": "black", "cterm": "black", "cterm16": "0" },
-\ "comment_grey": {"gui": "#637680", "cterm": "30", "cterm16": "0" },
+\ "background": {"gui": "#050505", "cterm": "black", "cterm16": "0" },
+\ "comment_grey": {"gui": "#6e6263", "cterm": "30", "cterm16": "0" },
 \}
 
 colorscheme onedark
