@@ -4,14 +4,14 @@
   "diagnostic.errorSign": "✘",
   "diagnostic.warningSign": "",
   "diagnostic.infoSign": "",
-  "diagnostic.enableMessage": "jump",
-  "diagnostic.virtualText": true,
-  "diagnostic.virtualTextCurrentLineOnly": true,
+  "diagnostic.enableMessage": "always",
+  "diagnostic.virtualText": false,
+  "diagnostic.virtualTextCurrentLineOnly": false,
   "eslint.format.enable": false,
   "javascript.format.enabled": false,
   "json.format.enable": false,
   "suggest.noselect": false,
-  "suggest.enablePreselect": false,
+  "suggest.enablePreselect": true,
   "suggest.completionItemKindLabels": {
     "keyword": "\uf1de", //  sliders
     "variable": "\ue79b", //  isometric box

@@ -20,9 +20,9 @@ call minpac#add('mileszs/ack.vim')
 " brew install fzf
 " $(brew --prefix)/opt/fzf/install
 call minpac#add('junegunn/fzf')
+call minpac#add('junegunn/fzf.vim')
 " Nice vim footer
 call minpac#add('vim-airline/vim-airline')
-call minpac#add('vim-airline/vim-airline-themes')
 " Advanced directory explorer
 call minpac#add('scrooloose/nerdtree')
 " Universal Ctags (good support for js ES6)
@@ -32,7 +32,7 @@ call minpac#add('vim-syntastic/syntastic')
 " Nice ctag explorer for each file
 " NOTE: Must install universal-ctags on system
 " brew install --HEAD universal-ctags/universal-ctags/universal-ctags
-call minpac#add('majutsushi/tagbar')
+call minpac#add('preservim/tagbar')
 " Phrase related utils. Maily the advanced :S/Pattern/NewPattern/g
 call minpac#add('tpope/vim-abolish')
 " Command line git wrapper
@@ -51,6 +51,7 @@ call minpac#add('tpope/vim-unimpaired')
 " npm install -g neovim
 " cd ~/.vim/pack/minpac/start/coc.nvim/
 " yarn install && yarn build
+" NOTE: On ubuntu it may be yarnpkg and not yarn
 " Then we ln copy the backed up coc-settings.
 " cd ~/.config/nvim/ && ln -s ~/src/configs/coc-settings.json .
 " We also copy the clangd/config.yaml file which is the global configs for
@@ -63,8 +64,12 @@ call minpac#add('neoclide/coc.nvim')
 " Edit iTerm2 to make the 'Hack' font the Non-ASCII font. OR import the
 " iTerm.json profile from ~/src/configs
 call minpac#add('ryanoasis/vim-devicons')
-" vim buffet
-call minpac#add('bagrat/vim-buffet')
+" vim buffet TODO(describe).
+" call minpac#add('bagrat/vim-buffet')
+" fixes language specific formatting for code. TODO(describe).
+call minpac#add('sheerun/vim-polyglot')
+call minpac#add('joshdick/onedark.vim')
+call minpac#add('srcery-colors/srcery-vim')
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
@@ -168,16 +173,23 @@ set tm=500
 syntax enable
 
 colorscheme elflord
-set background=dark
-highlight CocFloating ctermbg=235
+"set background=dark
+
+" Autocomplete box colors.
+hi CocFloating ctermbg=235
+hi CocMenuSel ctermbg=238
+
+" Max dimensions of autocomplete box.
+set pumheight=24
+set pumwidth=80 " doesn't work well
 
 " Set extra options when running in GUI mode
-if has("gui_running")
-    set guioptions-=T
-    set guioptions+=e
-    set t_Co=256
-    set guitablabel=%M\ %t
-endif
+" if has("gui_running")
+"     set guioptions-=T
+"     set guioptions+=e
+"     set t_Co=256
+"     set guitablabel=%M\ %t
+" endif
 
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf8
@@ -185,23 +197,22 @@ set encoding=utf8
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Use spaces instead of tabs
-set expandtab
+" " Use spaces instead of tabs
+" set expandtab
 
-" Be smart when using tabs ;)
-set smarttab
+" " Be smart when using tabs ;)
+" set smarttab
 
-" 1 tab == 4 spaces
-set shiftwidth=4
-set tabstop=4
+" " 1 tab == 4 spaces
+" set shiftwidth=4
+" set tabstop=4
 
-set ai "Auto indent
-set si "Smart indent
-set wrap "Wrap lines
+" set ai "Auto indent
+" set si "Smart indent
+" set wrap "Wrap lines
 
 " Change default tab settings based on file extension
 augroup FileTypeTabRules
@@ -653,12 +664,14 @@ let g:coc_disable_transparent_cursor = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => NERDTree Related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <silent> <Leader>ee :NERDTreeToggle<CR>
+nmap <silent> <Leader>F :NERDTreeToggle<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => FZF and File Lookup Related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <silent> <Leader>f :FZF<CR>
+nmap <silent> <Leader>tt :BTags<CR>
+nmap <silent> <Leader>u :Tags<CR>
 
 " Use %% in command line mode to get current directory
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
@@ -679,7 +692,8 @@ cnoremap <Esc>f <S-Right>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Control toggling the tagbar
-nmap <silent> <leader>tt :TagbarToggle<CR>
+nmap <silent> <leader>T :TagbarToggle<CR>
+let g:tagbar_autofocus = 1
 let g:tagbar_sort = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -729,3 +743,29 @@ nnoremap <silent> ]] :norm ]-<CR>
 " => C++ related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <leader>c :! g++ -std=c++11 % -o out && ./out<cr>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => OneDark Theme related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+if (empty($TMUX))
+  if (has("nvim"))
+    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  endif
+  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+endif
+
+syntax on
+colorscheme onedark
+highlight Normal ctermbg=black
+let g:airline_theme='onedark'
+"let g:srcery_red = '#FF0000'
+"colorscheme srcery
