@@ -78,6 +78,7 @@ call minpac#add('lucasprag/simpleblack')
 call minpac#add('nanotech/jellybeans.vim')
 call minpac#add('ackyshake/Spacegray.vim')
 call minpac#add('sainnhe/gruvbox-material')
+call minpac#add('tomasiser/vim-code-dark')
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
@@ -736,7 +737,7 @@ syntax on
 
 "colorscheme onedark
 let ayucolor="dark"   " for dark version of theme
-colorscheme ayu
+"colorscheme ayu
 let g:gruvbox_contrast_dark = "hard"
 let g:gruvbox_material_foreground = "original"
 let g:gruvbox_material_background = "hard"
@@ -756,7 +757,14 @@ let g:tokyonight_enable_italic = 0
 
 "colorscheme tokyonight
 
-"colorscheme codedark
+let g:codedark_transparent=1
+let g:codedark_conservative=1
+let g:airline_theme='codedark'
+colorscheme codedark
+
+"setlocal back='#1E1E1E'
+"highlight! Normal guibg=back
+
 "colorscheme simpleblack
 "colorscheme jellybeans
 
