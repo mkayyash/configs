@@ -97,3 +97,7 @@ export VIMDATA=~/.local/share/nvim
 #Increase bash history size (default is 500 on mac)
 HISTSIZE=20000
 HISTFILESIZE=20000
+
+#Fix colors in terminal (for example when doing ls ~/)
+export CLICOLOR=1
+export LSCOLORS=cxfxdxdxhxegedabagacad
