@@ -735,9 +735,8 @@ syntax on
 " " \ "comment_grey": {"gui": "#555e5d", "cterm": "30", "cterm16": "0" },
 
 "colorscheme onedark
-set termguicolors     " enable true colors support
 let ayucolor="dark"   " for dark version of theme
-"colorscheme ayu
+colorscheme ayu
 let g:gruvbox_contrast_dark = "hard"
 let g:gruvbox_material_foreground = "original"
 let g:gruvbox_material_background = "hard"
@@ -750,7 +749,7 @@ let g:gruvbox_material_current_word = 'grey background'
 let g:gruvbox_material_lightline_disable_bold = 1
 let g:gruvbox_material_colors_override = {'bg0': ['#101010', '234']}
 "autocmd vimenter * ++nested colorscheme gruvbox
-autocmd vimenter * ++nested colorscheme gruvbox-material
+"autocmd vimenter * ++nested colorscheme gruvbox-material
 "colorscheme spacegray
 let g:tokyonight_style = 'night' " available: night, storm
 let g:tokyonight_enable_italic = 0
