@@ -70,6 +70,14 @@ call minpac#add('ryanoasis/vim-devicons')
 call minpac#add('sheerun/vim-polyglot')
 call minpac#add('joshdick/onedark.vim')
 call minpac#add('srcery-colors/srcery-vim')
+call minpac#add('ayu-theme/ayu-vim')
+call minpac#add('morhetz/gruvbox')
+call minpac#add('ghifarit53/tokyonight-vim')
+call minpac#add('tomasiser/vim-code-dark')
+call minpac#add('lucasprag/simpleblack')
+call minpac#add('nanotech/jellybeans.vim')
+call minpac#add('ackyshake/Spacegray.vim')
+call minpac#add('sainnhe/gruvbox-material')
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
@@ -466,6 +474,7 @@ let g:coc_global_extensions = [
   \ 'coc-prettier',
   \ 'coc-clangd',
   \ 'coc-solidity',
+  \ 'coc-highlight',
   \ ]
 
 " Some servers have issues with backup files, see #649.
@@ -717,22 +726,49 @@ if (has("termguicolors"))
 endif
 
 syntax on
-let g:airline_theme='onedark'
-let g:onedark_color_overrides = {
-\ "background": {"gui": "#080808", "cterm": "black", "cterm16": "0" }
-\}
+"let g:airline_theme='onedark'
+ let g:onedark_color_overrides = {
+ \ "background": {"gui": "#000000", "cterm": "black", "cterm16": "0" }
+ \}
 
-" To customize the comment color change this.
-" \ "comment_grey": {"gui": "#555e5d", "cterm": "30", "cterm16": "0" },
+" " To customize the comment color change this.
+" " \ "comment_grey": {"gui": "#555e5d", "cterm": "30", "cterm16": "0" },
 
-colorscheme onedark
+"colorscheme onedark
+set termguicolors     " enable true colors support
+let ayucolor="dark"   " for dark version of theme
+"colorscheme ayu
+let g:gruvbox_contrast_dark = "hard"
+let g:gruvbox_material_foreground = "original"
+let g:gruvbox_material_background = "hard"
+let g:gruvbox_material_disable_italic_comment = 1
+let g:gruvbox_material_enable_bold = 0
+let g:gruvbox_material_enable_italic = 0
+"let g:gruvbox_material_sign_column_background = 'grey'
+let g:gruvbox_material_ui_contrast = 'high'
+let g:gruvbox_material_current_word = 'grey background'
+let g:gruvbox_material_lightline_disable_bold = 1
+let g:gruvbox_material_colors_override = {'bg0': ['#101010', '234']}
+"autocmd vimenter * ++nested colorscheme gruvbox
+autocmd vimenter * ++nested colorscheme gruvbox-material
+"colorscheme spacegray
+let g:tokyonight_style = 'night' " available: night, storm
+let g:tokyonight_enable_italic = 0
 
-highlight! link CocMenuSel PmenuSel
-highlight! link CocFloating Pmenu
+"colorscheme tokyonight
+
+"colorscheme codedark
+"colorscheme simpleblack
+"colorscheme jellybeans
+
+"highlight! link CocPumMenu Pmenu
+"highlight! link CocMenuSel PmenuSel
+"highlight! link CocPumVirtualText Grey
 
 " Autocomplete box colors.
-"hi CocFloating guifg=#0c6370 ctermbg=235
-"hi CocMenuSel guifg=#000000 ctermbg=black
+"hi! Pmenu guifg=#0c6370 ctermbg=235
+"hi! PmenuSel guifg=#000000 ctermbg=black
+"hi! PmenuSbar guifg=#000000 ctermbg=black
 
 " Max dimensions of autocomplete box.
 set pumheight=24
