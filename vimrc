@@ -1,5 +1,5 @@
 """""""""""""""""""""""""""
-" => Plugin Manager Related
+" => Plugins
 """""""""""""""""""""""""""
 packadd minpac
 call minpac#init()
@@ -15,6 +15,9 @@ call minpac#add('Valloric/ListToggle')
 " Running ack grep search
 " NOTE: must install ack in system.
 call minpac#add('mileszs/ack.vim')
+" My preferred grep tool (git, ag, ack)
+" NOTE: must install git, ag and ack
+call minpac#add('mhinz/vim-grepper')
 " Filesystem navigation (Fuzzy finding).
 " NOTE: Must install on command line first in homebrew:
 " brew install fzf
@@ -27,20 +30,16 @@ call minpac#add('vim-airline/vim-airline')
 call minpac#add('scrooloose/nerdtree')
 " Universal Ctags (good support for js ES6)
 call minpac#add('universal-ctags/ctags')
-" Syntax checking in vim
-call minpac#add('vim-syntastic/syntastic')
 " Nice ctag explorer for each file
 " NOTE: Must install universal-ctags on system
 " brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 call minpac#add('preservim/tagbar')
-" Phrase related utils. Maily the advanced :S/Pattern/NewPattern/g
+" Phrase related utils. Mainly the advanced :S/Pattern/NewPattern/g
 call minpac#add('tpope/vim-abolish')
-" Command line git wrapper
+" Command line git wrapper. :Git <command>
 call minpac#add('tpope/vim-fugitive')
-" Allows commenting/uncommenting lines with gc
+" Allows commenting/uncommenting code blocks with gc
 call minpac#add('tpope/vim-commentary')
-" Run :A to jump to a file's alternate
-call minpac#add('tpope/vim-projectionist')
 " Allows jumping around in a file based on indentation using [= for example
 call minpac#add('jeetsukumaran/vim-indentwise')
 " Activates buffer navigation with [b also similarly [a, [q, [l and [t for
@@ -57,19 +56,95 @@ call minpac#add('tpope/vim-unimpaired')
 " We also copy the clangd/config.yaml file which is the global configs for
 " clangd projects.
 " ln -s ~/src/configs/clangd_config.yaml ~/.config/clangd/config.yaml
-" TODO: Make script to initialize nvim in both ubuntu and mac.
 call minpac#add('neoclide/coc.nvim')
 " NOTE: To install, we need first a dev icon installed:
 " brew tap homebrew/cask-fonts && brew install --cask font-hack-nerd-font
 " Edit iTerm2 to make the 'Hack' font the Non-ASCII font. OR import the
 " iTerm.json profile from ~/src/configs
 call minpac#add('ryanoasis/vim-devicons')
-" vim buffet TODO(describe).
-" call minpac#add('bagrat/vim-buffet')
-" fixes language specific formatting for code. TODO(describe).
+" Fixes language specific formatting for most languages. Also auto adjusts
+" the indentation according to current file layout.
 call minpac#add('sheerun/vim-polyglot')
+" My favorite two vim colorschemes
 call minpac#add('tomasiser/vim-code-dark')
 call minpac#add('mkayyash/gruvbox-material')
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Helper Functions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Delete trailing white space on save.
+func! DeleteTrailingWS()
+  exe "normal mz"
+  %s/\s\+$//ge
+  exe "normal `z"
+endfunc
+
+function! CmdLine(str)
+    exe "menu Foo.Bar :" . a:str
+    emenu Foo.Bar
+    unmenu Foo
+endfunction
+
+function! VisualSelection(direction) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+    elseif a:direction == 'gv'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*')
+    elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+    elseif a:direction == 'replaceSubvert'
+        call CmdLine("%S" . '/'. l:pattern . '/')
+    elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
+
+" Returns true if paste mode is enabled
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE  '
+    en
+    return ''
+endfunction
+
+" Don't close window, when deleting a buffer
+command! Bclose call <SID>BufcloseCloseIt()
+function! <SID>BufcloseCloseIt()
+   let l:currentBufNum = bufnr("%")
+   let l:alternateBufNum = bufnr("#")
+
+   if buflisted(l:alternateBufNum)
+     buffer #
+   else
+     bnext
+   endif
+
+   if bufnr("%") == l:currentBufNum
+     new
+   endif
+
+   if buflisted(l:currentBufNum)
+     execute("bdelete! ".l:currentBufNum)
+   endif
+endfunction
+
+command! -nargs=0 -bar Qargs execute 'args' QuickfixFilenames()
+function! QuickfixFilenames()
+    let buffer_numbers = {}
+    for quickfix_item in getqflist()
+        let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
+    endfor
+    return join(map(values(buffer_numbers), 'fnameescape(v:val)'))
+endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
@@ -98,12 +173,6 @@ nmap <leader>w :w!<cr>
 " Close window
 nmap <leader>q :q<cr>
 
-" Enable syntax highlight.
-syntax on
-
-" Recursively lookup for a ctags tag file.
-set tags=tags;
-
 " Shows lines selected in visual mode (and more).
 set showcmd
 
@@ -113,8 +182,20 @@ nnoremap <Leader>rtw :%s/\s\+$//e<CR>
 " Treat all numbers as decimals.
 set nrformats=
 
+" Remap VIM 0 to first non-blank character
+map 0 ^
+
+" Toggle paste mode on and off
+map <leader>pp :setlocal paste!<cr>
+
+" Remap jj to escape in insert mode.
+inoremap jj <Esc>
+
+" Count search instances
+map <Leader>o :%s///n<CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => VIM user interface
+" => User Interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Turn on the WiLd menu
 set wildmenu
@@ -165,31 +246,8 @@ set novisualbell
 set t_vb=
 set tm=500
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Text, tab and indent related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Change default tab settings based on file extension
-augroup FileTypeTabRules
-    autocmd!
-    autocmd BufRead,BufNewFile *.pug,*.jade setlocal tabstop=2 shiftwidth=2
-augroup END
-
-" Red highlight >80 character lines
-augroup FileTypeLengthRules
-    autocmd BufWinEnter *.js,*.pug,*.jade let w:m1=matchadd('ErrorMsg', '\%>80v.\+', -1)
-
-" Highlight trailing whitespaces.
-"match ErrorMsg '\s\+$'
-
-augroup HighlightWhitespace
-    " Ignore whitespace on those files
-    autocmd BufWinEnter *.md,*.pug let b:md_file=1
-    " Apply whitespace on everything else
-    autocmd BufWinEnter * if ! exists('b:md_file') | let w:m1=matchadd('ErrorMsg', '\s\+$', -1) | endif
-
 """"""""""""""""""""""""""""""
-" => Visual mode related
+" => Visual Mode
 """"""""""""""""""""""""""""""
 " Visual mode pressing * or # searches for the current selection
 " Super useful! From an idea by Michael Naumann
@@ -197,7 +255,24 @@ vnoremap <silent> * :call VisualSelection('f')<CR>
 vnoremap <silent> # :call VisualSelection('b')<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Moving around, tabs, windows and buffers
+" => Command Line Mode 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Use %% in command line mode to get current directory
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
+" Command line mode naviation similar to terminal
+" Refer to :h cmdline-editing for defaults
+" Type: sed -n l in command line to test keys
+" ^A   ^E      ^[b    ^[f
+cnoremap <C-A> <Home>
+cnoremap <C-E> <End>
+" TODO: For some reason since <option-left> maps to <Esc>b on mac but not here.
+" Same with <option>right.
+cnoremap <Esc>b <S-Left>
+cnoremap <Esc>f <S-Right>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Navigation, Tabs, Windows and Buffers
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Disable highlight when <leader><cr> is pressed
 map <silent> <leader><cr> :noh<cr>
@@ -209,10 +284,10 @@ map <C-h> <C-W>h
 map <C-l> <C-W>l
 
 " Close the current buffer
-" map <leader>bd :Bclose<cr>
+map <leader>bd :Bclose<cr>
 
 " Close all the buffers
-" map <leader>ba :1,1000 bd!<cr>
+map <leader>ba :%bd!<cr>
 
 " Useful mappings for managing tabs
 map <leader>tn :tabnew<cr>
@@ -233,7 +308,7 @@ try
 catch
 endtry
 
-" Return to last edit position when opening files (You want this!)
+" Return to last edit position when opening files
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
      \   exe "normal! g`\"" |
@@ -241,74 +316,13 @@ autocmd BufReadPost *
 " Remember info about open buffers on close
 set viminfo^=%
 
-""""""""""""""""""""""""""""""
-" => Status line
-""""""""""""""""""""""""""""""
-" Always show the status line
-set laststatus=2
-
-" Format the status line
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ %r%{getcwd()}%h\ %w\ \(%l,%c\)
+" TODO: Make this work when there are no more levels to jump to.
+" in that case we should just do a [=
+nnoremap <silent> [[ :norm [-<CR>
+nnoremap <silent> ]] :norm ]-<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Editing mappings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Remap VIM 0 to first non-blank character
-map 0 ^
-
-" Move a line of text using CTRL+[jk] in visual mode
-"vmap <C-j> :m'>+<cr>`<my`>mzgv`yo`z
-"vmap <C-k> :m'<-2<cr>`>my`<mzgv`yo`z
-
-" Delete trailing white space on save, useful for Python and CoffeeScript
-func! DeleteTrailingWS()
-  exe "normal mz"
-  %s/\s\+$//ge
-  exe "normal `z"
-endfunc
-autocmd BufWrite *.py :call DeleteTrailingWS()
-autocmd BufWrite *.coffee :call DeleteTrailingWS()
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Ack grep searching and cope displaying
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" When you press gv you vimgrep after the selected text
-vnoremap <silent> gv :call VisualSelection('gv')<CR>
-
-" Open vimgrep and put the cursor in the right position
-map <leader>g :Ack 
-
-" Vimgreps in the current file
-" map <leader><space> :vimgrep // <C-R>%<C-A><right><right><right><right><right><right><right><right><right>
-
-
-" When you press <leader>r you can search and replace the selected text
-" NOTE(mkayyash): For some reason VisualSelection is no longer working.
-" vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
-vmap <leader>r "hy:%s/\<<C-r>h\>//g<left><left>
-vnoremap <silent> <leader>R :call VisualSelection('replaceSubvert')<CR>
-
-" Do :help cope if you are unsure what cope is. It's super useful!
-"
-" When you search with vimgrep, display your results in cope by doing:
-"   <leader>cc
-"
-" To go to the next search result do:
-"   <leader>n
-"
-" To go to the previous search results do:
-"   <leader>p
-"
-"OBSOLETED with ListToggle Plugin
-"map <leader>cc :call ToggleQuickFixWindow()<cr>
-map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
-map <leader>n :cn<cr>
-map <leader>p :cp<cr>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Spell checking
+" => Spell Checking
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Pressing ,ss will toggle and untoggle spell checking
 map <leader>ss :setlocal spell!<cr>
@@ -319,143 +333,67 @@ map <leader>sp [s
 map <leader>sa zg
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Misc
+" => Language Specific
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Remove the Windows ^M - when the encodings gets messed up
-"noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+autocmd BufWrite *.py :call DeleteTrailingWS()
 
-" Toggle paste mode on and off
-map <leader>pp :setlocal paste!<cr>
+" Change default tab settings based on file extension
+augroup FileTypeTabRules
+    autocmd!
+    autocmd BufRead,BufNewFile *.pug,*.jade setlocal tabstop=2 shiftwidth=2
+augroup END
 
-" Remap jj to escape in insert mode.
-inoremap jj <Esc>
+" Red highlight >80 character lines
+augroup FileTypeLengthRules
+    autocmd BufWinEnter *.ts,*.cpp,*.c,*.cc,*.js,*.pug,*.jade let w:m1=matchadd('ErrorMsg', '\%>80v.\+', -1)
 
-" Count search instances
-map <Leader>o :%s///n<CR>
+augroup HighlightWhitespace
+    " Ignore whitespace on those files
+    autocmd BufWinEnter vimrc,*.md,*.pug let b:md_file=1
+    " Apply whitespace on everything else
+    autocmd BufWinEnter * if ! exists('b:md_file') | let w:m1=matchadd('ErrorMsg', '\s\+$', -1) | endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Helper functions
+" => Grep and Vim Grepper
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-function! QuickFixWindowOpened()
-    for nr in range(1, winnr('$'))
-        let bnum = winbufnr(nr)
-        if getbufvar(bnum, '&buftype') == 'quickfix'
-            " found a quickfix
-            return 1
-        endif
-    endfor
-    return 0
-endfunction
+" When you press <leader>r you can search and replace the selected text
+vmap <leader>r "hy:%s/\<<C-r>h\>//g<left><left>
 
-function! PreviewWindowOpened()
-    for nr in range(1, winnr('$'))
-        if getwinvar(nr, "&pvw") == 1
-            " found a preview
-            return 1
-        endif
-    endfor
-    return 0
-endfunction
+nnoremap <leader>g :Grepper -tool git<cr>
+nnoremap <leader>G :Grepper -tool ag<cr>
 
-function! ToggleQuickFixWindow()
-    if QuickFixWindowOpened()
-        execute ":ccl"
-    else
-        execute ":botright copen"
-    endif
-endfunction
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
 
-function! TogglePreviewWindow()
-    if PreviewWindowOpened()
-        execute ":pclose"
-    else
-        execute ":YcmCompleter GetDoc"
-    endif
-endfunction
+" Optional. The default behaviour should work for most users.
+let g:grepper               = {}
+let g:grepper.tools         = ['git', 'ag', 'rg']
+let g:grepper.jump          = 1
+let g:grepper.next_tool     = '<leader>g'
+let g:grepper.simple_prompt = 1
+let g:grepper.quickfix      = 1
 
-" Enables/Disables Syntastic highlights by checking for signs in buffer
-function! ToggleSyntastic()
-   let l:currentBufNum = bufnr("%")
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Vim-Airline Status Line
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Always show the status line
+set laststatus=2
 
-   let l:res = execute(":sign place buffer=".l:currentBufNum)
-   if l:res =~"Signs for"
-       execute ":SyntasticReset"
-   else
-       execute ":SyntasticCheck"
-   endif
-endfunction
-
-function! CmdLine(str)
-    exe "menu Foo.Bar :" . a:str
-    emenu Foo.Bar
-    unmenu Foo
-endfunction
-
-function! VisualSelection(direction) range
-    let l:saved_reg = @"
-    execute "normal! vgvy"
-
-    let l:pattern = escape(@", '\\/.*$^~[]')
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
-
-    if a:direction == 'b'
-        execute "normal ?" . l:pattern . "^M"
-    elseif a:direction == 'gv'
-        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*')
-    elseif a:direction == 'replace'
-        call CmdLine("%s" . '/'. l:pattern . '/')
-    elseif a:direction == 'replaceSubvert'
-        call CmdLine("%S" . '/'. l:pattern . '/')
-    elseif a:direction == 'f'
-        execute "normal /" . l:pattern . "^M"
-    endif
-
-    let @/ = l:pattern
-    let @" = l:saved_reg
-endfunction
-
-
-" Returns true if paste mode is enabled
-function! HasPaste()
-    if &paste
-        return 'PASTE MODE  '
-    en
-    return ''
-endfunction
-
-" Don't close window, when deleting a buffer
-command! Bclose call <SID>BufcloseCloseIt()
-function! <SID>BufcloseCloseIt()
-   let l:currentBufNum = bufnr("%")
-   let l:alternateBufNum = bufnr("#")
-
-   if buflisted(l:alternateBufNum)
-     buffer #
-   else
-     bnext
-   endif
-
-   if bufnr("%") == l:currentBufNum
-     new
-   endif
-
-   if buflisted(l:currentBufNum)
-     execute("bdelete! ".l:currentBufNum)
-   endif
-endfunction
-
-command! -nargs=0 -bar Qargs execute 'args' QuickfixFilenames()
-function! QuickfixFilenames()
-    let buffer_numbers = {}
-    for quickfix_item in getqflist()
-        let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
-    endfor
-    return join(map(values(buffer_numbers), 'fnameescape(v:val)'))
-endfunction
+" Format the status line
+set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ %r%{getcwd()}%h\ %w\ \(%l,%c\)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => COC Autocomplete
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Max dimensions of autocomplete box.
+set pumheight=24
+set pumwidth=80 " doesn't work well
+
+" Set utf8 as standard encoding and en_US as the standard language
+set encoding=utf8
+
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
 " Check the :CocConfig file for custom changes.
 let g:coc_global_extensions = [
   \ 'coc-snippets',
@@ -529,8 +467,8 @@ function! ShowDocumentation()
   endif
 endfunction
 
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" [DISABLED] Highlight the symbol and its references when holding the cursor.
+" autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
@@ -625,40 +563,21 @@ nmap <silent> <Leader>F :NERDTreeToggle<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => FZF and File Lookup Related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Recursively lookup for a ctags tag file.
+set tags=tags;
+
 nmap <silent> <Leader>f :FZF<CR>
 nmap <silent> <Leader>tt :BTags<CR>
 nmap <silent> <Leader>u :Tags<CR>
 
-" Use %% in command line mode to get current directory
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
-
-" Command line mode naviation similar to terminal
-" Refer to :h cmdline-editing for defaults
-" Type: sed -n l in command line to test keys
-" ^A   ^E      ^[b    ^[f
-cnoremap <C-A> <Home>
-cnoremap <C-E> <End>
-" TODO: For some reason since <option-left> maps to <Esc>b on mac but not here.
-" Same with <option>right.
-cnoremap <Esc>b <S-Left>
-cnoremap <Esc>f <S-Right>
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Tagbar related
+" => Tagbar Related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " Control toggling the tagbar
 nmap <silent> <leader>T :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
 let g:tagbar_sort = 0
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Snippets Related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => ListToggle Related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -667,52 +586,14 @@ let g:lt_quickfix_list_toggle_map = '<leader>cc'
 "let g:lt_height = 10
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Syntastic Related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Common settings
-"let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
-" JS specific settings
-let g:syntastic_javascript_checkers=['eslint']
-
-" Set make to call "npm run lintall" for js projects only
-augroup LintAllForNodeJs
-    autocmd FileType javascript setlocal errorformat=%f:\ line\ %l\\,\ col\ %c\\,\ %trror\ -\ %m,\%f:\ line\ %l\\,\ col\ %c\\,\ %tarning\ -\ %m,\%-G%.%#
-    autocmd FileType javascript setlocal makeprg=npm\ run\ lintall\ -s\
-
-autocmd VimEnter * silent! SyntasticToggleMode
-map <silent> <leader>mm :call ToggleSyntastic()<CR>
-"map <leader>m :SyntasticCheck<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Navigation Related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" TODO: Make this work when there are no more levels to jump to.
-" in that case we should just do a [=
-nnoremap <silent> [[ :norm [-<CR>
-nnoremap <silent> ]] :norm ]-<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => C++ related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>c :! g++ -std=c++11 % -o out && ./out<cr>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Theme/ColorScheme related
+" => Theme/ColorScheme Related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Use 24-bit (true-color) mode in Vim/Neovim even in tmux.
 " Assumes tmux version 2.2 or later.
-" (see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+" (see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more info)
 if (has("nvim"))
-  "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
-"For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-"Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-" < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
 if (has("termguicolors"))
   set termguicolors
 endif
@@ -731,19 +612,10 @@ let g:gruvbox_material_show_eob = 0
 let g:gruvbox_material_colors_override = {
   \ 'bg0': ['#0f141a', '234'],
   \}
+"DISABLED GRUVBOX THEME
 "autocmd vimenter * ++nested colorscheme gruvbox-material
 
 let g:codedark_transparent=1
 let g:codedark_conservative=1
 let g:airline_theme='codedark'
 colorscheme codedark
-
-" Max dimensions of autocomplete box.
-set pumheight=24
-set pumwidth=80 " doesn't work well
-
-" Set utf8 as standard encoding and en_US as the standard language
-set encoding=utf8
-
-" Use Unix as the standard file type
-set ffs=unix,dos,mac
