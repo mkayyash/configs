@@ -89,6 +89,9 @@ export VISUAL=nvim
 alias vim=nvim
 alias vi=nvim
 
+# Colorized ls
+alias ls="ls -G"
+
 #export VIMCONFIG=~/.vim
 #export VIMDATA=~/.vim
 export VIMCONFIG=~/.config/nvim
@@ -101,3 +104,14 @@ HISTFILESIZE=20000
 #Fix colors in terminal (for example when doing ls ~/)
 export CLICOLOR=1
 export LSCOLORS=cxfxdxdxhxegedabagacad
+
+if [ $("uname") == "Darwin" ]
+then
+    # hide the stupid mac catalina warning about switching to zsh
+    export BASH_SILENCE_DEPRECATION_WARNING=1
+
+    # required by nvm installation on MAC
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+    [ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
+fi

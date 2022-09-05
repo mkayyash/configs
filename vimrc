@@ -405,6 +405,7 @@ let g:coc_global_extensions = [
   \ 'coc-clangd',
   \ 'coc-solidity',
   \ 'coc-highlight',
+  \ 'coc-sh',
   \ ]
 
 " Some servers have issues with backup files, see #649.
