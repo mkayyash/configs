@@ -26,6 +26,7 @@ call minpac#add('junegunn/fzf')
 call minpac#add('junegunn/fzf.vim')
 " Nice vim footer
 call minpac#add('vim-airline/vim-airline')
+call minpac#add('vim-airline/vim-airline-themes')
 " Advanced directory explorer
 call minpac#add('scrooloose/nerdtree')
 " Universal Ctags (good support for js ES6)
@@ -387,7 +388,7 @@ set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ %r%{getcwd()}%h\ %w\ \(%l,%c\)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Max dimensions of autocomplete box.
 set pumheight=24
-set pumwidth=80 " doesn't work well
+"set pumwidth=80 " doesn't work well
 
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf8
@@ -407,6 +408,9 @@ let g:coc_global_extensions = [
   \ 'coc-highlight',
   \ 'coc-sh',
   \ ]
+
+" On Ubuntu LTS this may be more common to have older neovim releases.
+let g:coc_disable_startup_warning = 1
 
 " Some servers have issues with backup files, see #649.
 set nobackup

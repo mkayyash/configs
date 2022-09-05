@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
+
+shopt -s expand_aliases
 function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
+export PATH=/opt/homebrew/bin:$PATH
 if ! command -v brew &> /dev/null
 then
   echo "Homebrew not installed. Installing..."

@@ -107,6 +107,8 @@ export LSCOLORS=cxfxdxdxhxegedabagacad
 
 if [ $("uname") == "Darwin" ]
 then
+    export PATH=/opt/homebrew/bin:$PATH
+
     # hide the stupid mac catalina warning about switching to zsh
     export BASH_SILENCE_DEPRECATION_WARNING=1
 
@@ -114,4 +116,8 @@ then
     export NVM_DIR="$HOME/.nvm"
     [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
     [ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
+else
+    export NODE_PATH=/usr/lib/nodejs:/usr/share/nodejs
+    source /usr/share/doc/fzf/examples/key-bindings.bash
+    source /usr/share/doc/fzf/examples/completion.bash
 fi
