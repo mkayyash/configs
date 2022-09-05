@@ -140,10 +140,13 @@ if [ ! -d "$HOME/src/configs" ]; then
   echo "Installing ~/src directory and configs repo"
   mkdir -p $HOME/src
   git clone https://github.com/mkayyash/configs.git $HOME/src/configs
-  grep -qxF "source ~/src/configs/general_bashrc.sh" $BASHRC || echo "source ~/src/configs/general_bashrc.sh" | sudo tee -a $BASHRC
-  ln -s $HOME/src/configs/tmux.conf $HOME/.tmux.conf 2>/dev/null
 fi
 
+grep -qxF "source ~/src/configs/general_bashrc.sh" $BASHRC || echo "source ~/src/configs/general_bashrc.sh" | sudo tee -a $BASHRC
+ln -s $HOME/src/configs/tmux.conf $HOME/.tmux.conf 2>/dev/null
+
+# Check is not super robust so may need to comment the if statement out and just
+# run this code anyways.
 if ! grep -q "source ~/.vimrc" "$HOME/.config/nvim/init.vim"; then
   ln -s $HOME/src/configs/vimrc $HOME/.vimrc 2>/dev/null
   mkdir -p $HOME/.config/nvim
@@ -157,6 +160,8 @@ if ! grep -q "source ~/.vimrc" "$HOME/.config/nvim/init.vim"; then
   npm install -g neovim
 fi
 
+# Check is not super robust so may need to comment the if statement out and just
+# run this code anyways.
 if [ ! -d "$HOME/.config/nvim/pack/minpac/opt/minpac" ]; then
   export PATH="$HOME/Library/Python/3.x/bin:$PATH"
   mkdir -p $HOME/.config/nvim/pack/minpac/opt

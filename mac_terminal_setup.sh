@@ -38,4 +38,4 @@ done
 
 brew tap homebrew/cask-fonts && brew install --cask font-hack-nerd-font
 
-ln -s ~/src/configs/iTerm.json $HOME/Library/Application\ Support/iTerm2/DynamicProfiles/iTerm.json2>/dev/null
+ln -s ~/src/configs/iTerm.json $HOME/Library/Application\ Support/iTerm2/DynamicProfiles/iTerm.json 2>/dev/null
