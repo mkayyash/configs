@@ -150,6 +150,9 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Enable mouse access
+set mouse=a
+
 " Sets how many lines of history VIM has to remember
 set history=1000
 
