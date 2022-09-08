@@ -165,7 +165,7 @@ if ! grep -q "source ~/.vimrc" "$HOME/.config/nvim/init.vim"; then
   pip3 install --user --upgrade neovim
   pip3 install --user --upgrade neovim-remote
   sudo gem install neovim
-  npm install -g neovim
+  sudo npm install -g neovim
 fi
 
 # Check is not super robust so may need to comment the if statement out and just
