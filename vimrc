@@ -577,6 +577,7 @@ set tags=tags;
 nmap <silent> <Leader>f :FZF<CR>
 nmap <silent> <Leader>tt :BTags<CR>
 nmap <silent> <Leader>u :Tags<CR>
+nmap <silent> <Leader>L :Lines<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Tagbar Related
