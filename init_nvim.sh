@@ -98,7 +98,8 @@ then
     echo "Authenticating Github. Login to Github..."
     gh auth login
   else
-    echo "WARNING: Couldn't install Github CLI. Refer to https://github.com/cli/cli/blob/trunk/docs/install_linux.md for the latest instructions"
+    sudo apt-get install gh
+    gh auth login
   fi
 fi
 
