@@ -60,6 +60,7 @@ then
   packages_needed['yarn']='yarn'
   packages_needed['ctags']='universal-ctags'
 else
+  packages_needed['pip3']='python3-pip'
   packages_needed['lua']='lua5.3'
   packages_needed['ag']='silversearcher-ag'
   packages_needed['yarnpkg']='yarnpkg'
