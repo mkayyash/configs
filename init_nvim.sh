@@ -50,7 +50,6 @@ packages_needed['nvim']='neovim'
 packages_needed['rg']='ripgrep'
 packages_needed['ack']='ack'
 packages_needed['fzf']='fzf'
-packages_needed['ctags']='universal-ctags'
 packages_needed['npm']='npm'
 packages_needed['wget']='wget'
 packages_needed['curl']='curl'
@@ -59,10 +58,12 @@ then
   packages_needed['lua']='lua'
   packages_needed['ag']='ag'
   packages_needed['yarn']='yarn'
+  packages_needed['ctags']='universal-ctags'
 else
   packages_needed['lua']='lua5.3'
   packages_needed['ag']='silversearcher-ag'
   packages_needed['yarnpkg']='yarnpkg'
+  packages_needed['ctags']='exuberant-ctags'
 fi
 for key in "${!packages_needed[@]}"; do
   bin=$key
@@ -143,12 +144,17 @@ if [ ! -d "$HOME/src/configs" ]; then
 fi
 
 grep -qxF "source ~/src/configs/general_bashrc.sh" $BASHRC || echo "source ~/src/configs/general_bashrc.sh" | sudo tee -a $BASHRC
+source $BASHRC
 ln -s $HOME/src/configs/tmux.conf $HOME/.tmux.conf 2>/dev/null
 
 # Check is not super robust so may need to comment the if statement out and just
 # run this code anyways.
 if ! grep -q "source ~/.vimrc" "$HOME/.config/nvim/init.vim"; then
-  ln -s $HOME/src/configs/vimrc $HOME/.vimrc 2>/dev/null
+  if [ ! -f "$HOME/.vimrc" ]; then
+    ln -s $HOME/src/configs/vimrc $HOME/.vimrc 2>/dev/null
+  else
+    grep -qxF "source ~/src/configs/vimrc" $HOME/.vimrc || echo "source ~/src/configs/vimrc" | sudo tee -a $HOME/.vimrc
+  fi
   mkdir -p $HOME/.config/nvim
   touch $HOME/.config/nvim/init.vim
   echo 'set runtimepath^=~/.vim runtimepath+=~/.vim/after' > $HOME/.config/nvim/init.vim
