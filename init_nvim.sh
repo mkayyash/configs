@@ -36,13 +36,11 @@ fi
 declare -A packages_needed
 # We install these packages if they are not already installed.
 # `packages_needed` is a map of binary to package name in reverse order.
-packages_needed['redis-cli']='redis'
 packages_needed['perl']='perl'
 packages_needed['sqlite3']='sqlite3'
 packages_needed['tmux']='tmux'
 packages_needed['gcc']='gcc'
 packages_needed['cscope']='cscope'
-packages_needed['aws']='awscli'
 packages_needed['python3']='python3'
 packages_needed['git']='git'
 packages_needed['nvim']='neovim'
@@ -95,12 +93,11 @@ then
   if [ $("uname") == "Darwin" ]
   then
     brew install gh
-    echo "Authenticating Github. Login to Github..."
-    gh auth login
   else
     sudo apt-get install gh
-    gh auth login
   fi
+  echo "Authenticating Github. Login to Github..."
+  gh auth login
 fi
 
 if ! command -v node &> /dev/null
@@ -116,19 +113,6 @@ then
   nvm install --lts
   nvm use --lts
   nvm alias default lts/*
-fi
-
-if ! command -v mongod &> /dev/null
-then
-  echo "Installing MongoDB"
-  if [ $("uname") == "Darwin" ]
-  then
-    brew tap mongodb/brew
-    brew install mongodb-community
-    brew services start mongodb-community
-  else
-    package_install mongodb
-  fi
 fi
 
 if ! command -v fzf &> /dev/null
