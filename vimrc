@@ -408,6 +408,7 @@ let g:coc_global_extensions = [
   \ 'coc-prettier',
   \ 'coc-clangd',
   \ 'coc-solidity',
+  \ 'coc-rust-analyzer',
   \ 'coc-highlight',
   \ 'coc-sh',
   \ ]

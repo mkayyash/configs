@@ -42,6 +42,7 @@ packages_needed['tmux']='tmux'
 packages_needed['gcc']='gcc'
 packages_needed['cscope']='cscope'
 packages_needed['python3']='python3'
+packages_needed['rustc']='rust'
 packages_needed['git']='git'
 packages_needed['nvim']='neovim'
 packages_needed['rg']='ripgrep'
@@ -159,6 +160,8 @@ if [ ! -d "$HOME/.config/nvim/pack/minpac/opt/minpac" ]; then
   export PATH="$HOME/Library/Python/3.x/bin:$PATH"
   mkdir -p $HOME/.config/nvim/pack/minpac/opt
   git clone https://github.com/k-takata/minpac.git $HOME/.config/nvim/pack/minpac/opt/minpac
+  # TODO(mkayyash): Check the output directory $HOME/.vim/ for installed packages
+  # to decide if we should run this minpac install (more robust).
   nvim  -c ":call minpac#update('', {'do': 'quitall'})"
   cd $HOME/.vim/pack/minpac/start/coc.nvim/
   npm i --save esbuild
