@@ -71,6 +71,7 @@ if [ $("uname") == "Darwin" ]
 then
     alias sbash='source ~/.bash_profile'
     alias ack-grep="ack"
+    export PATH=/opt/homebrew/bin:$PATH
     # make bash completion work (e.g. for git).
     # Note must setup first via: brew install git bash-completion
     if [ -f $(brew --prefix)/etc/bash_completion ]; then
@@ -107,15 +108,15 @@ export LSCOLORS=cxfxdxdxhxegedabagacad
 
 if [ $("uname") == "Darwin" ]
 then
-    export PATH=/opt/homebrew/bin:$PATH
-
     # hide the stupid mac catalina warning about switching to zsh
     export BASH_SILENCE_DEPRECATION_WARNING=1
 
     # required by nvm installation on MAC
     export NVM_DIR="$HOME/.nvm"
-    [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-    [ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
+    [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+    [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+    [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 else
     export NODE_PATH=/usr/lib/nodejs:/usr/share/nodejs
     source /usr/share/doc/fzf/examples/key-bindings.bash

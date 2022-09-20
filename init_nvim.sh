@@ -47,7 +47,6 @@ packages_needed['git']='git'
 packages_needed['nvim']='neovim'
 packages_needed['rg']='ripgrep'
 packages_needed['ack']='ack'
-packages_needed['fzf']='fzf'
 packages_needed['npm']='npm'
 packages_needed['wget']='wget'
 packages_needed['curl']='curl'
@@ -57,7 +56,7 @@ then
   packages_needed['lua']='lua'
   packages_needed['ag']='ag'
   packages_needed['yarn']='yarn'
-  packages_needed['ctags']='universal-ctags'
+  packages_needed['ctags']='ctags'
 else
   packages_needed['ruby']='ruby-dev'
   packages_needed['pip3']='python3-pip'
@@ -94,6 +93,7 @@ then
   if [ $("uname") == "Darwin" ]
   then
     brew install gh
+    brew install git bash-completion
   else
     sudo apt-get install gh
   fi
@@ -118,6 +118,7 @@ fi
 
 if ! command -v fzf &> /dev/null
 then
+  package_install nvm
   echo "Setting up FZF to work on the command line"
   if [ $("uname") == "Darwin" ]
   then
