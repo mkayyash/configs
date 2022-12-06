@@ -120,5 +120,4 @@ then
 else
     export NODE_PATH=/usr/lib/nodejs:/usr/share/nodejs
     source /usr/share/doc/fzf/examples/key-bindings.bash
-    source /usr/share/doc/fzf/examples/completion.bash
 fi

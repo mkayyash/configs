@@ -38,7 +38,7 @@ call minpac#add('preservim/tagbar')
 " Phrase related utils. Mainly the advanced :S/Pattern/NewPattern/g
 call minpac#add('tpope/vim-abolish')
 " Command line git wrapper. :Git <command>
-call minpac#add('tpope/vim-fugitive')
+" call minpac#add('tpope/vim-fugitive')
 " Allows commenting/uncommenting code blocks with gc
 call minpac#add('tpope/vim-commentary')
 " Allows jumping around in a file based on indentation using [= for example
@@ -402,6 +402,8 @@ set ffs=unix,dos,mac
 let g:coc_global_extensions = [
   \ 'coc-snippets',
   \ 'coc-tsserver',
+  \ 'coc-pyright',
+  \ 'coc-go',
   \ 'coc-json',
   \ 'coc-css',
   \ 'coc-eslint',

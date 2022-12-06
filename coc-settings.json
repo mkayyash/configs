@@ -48,5 +48,7 @@
   "typescript.format.semicolons": "remove",
   "typescript.preferences.quoteStyle": "double",
   "typescript.referencesCodeLens.enable": false,
-  "typescript.preferences.useAliasesForRenames": true
+  "typescript.preferences.useAliasesForRenames": true,
+  "python.formatting.provider": "autopep8",
+  "python.formatting.autopep8Path": "~/.local/bin/autopep8"
 }
