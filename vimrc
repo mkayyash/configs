@@ -66,6 +66,9 @@ call minpac#add('ryanoasis/vim-devicons')
 " Fixes language specific formatting for most languages. Also auto adjusts
 " the indentation according to current file layout.
 call minpac#add('sheerun/vim-polyglot')
+" Support for bazel BUILD files.
+call minpac#add('google/vim-maktaba')
+call minpac#add('bazelbuild/vim-bazel')
 " My favorite two vim colorschemes
 call minpac#add('tomasiser/vim-code-dark')
 call minpac#add('mkayyash/gruvbox-material')
@@ -399,6 +402,12 @@ set encoding=utf8
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
 " Check the :CocConfig file for custom changes.
+" These extensions are installed in ~/.config/coc/
+" If clangd misbehaves try running clangd or clangd++ from the command line
+" likely that command fails and gives a hint on whats going on (maybe xcode
+" needs to be updated).
+" These extensions are often using external utilities. So if they misbehave
+" in vim then likely the external binary is the fault.
 let g:coc_global_extensions = [
   \ 'coc-snippets',
   \ 'coc-tsserver',

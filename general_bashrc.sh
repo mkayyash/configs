@@ -93,6 +93,9 @@ alias vi=nvim
 # Colorized ls
 alias ls="ls -G"
 
+# Google
+alias blaze=bazel
+
 #export VIMCONFIG=~/.vim
 #export VIMDATA=~/.vim
 export VIMCONFIG=~/.config/nvim
