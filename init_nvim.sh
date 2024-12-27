@@ -155,8 +155,8 @@ then
 else
   pip_packages_needed['numpy']='python3-numpy'
   pip_packages_needed['matplotlib']='python3-matplotlib'
-  pip_packages_needed['scipy']='python3-scipy'
-  pip_packages_needed['sklearn']='python3-sklearn python3-sklearn-lib python-sklearn-doc'
+  # pip_packages_needed['scipy']='python3-scipy'
+  pip_packages_needed['scikit-learn']='python3-sklearn python3-sklearn-lib python-sklearn-doc'
 fi
 for key in "${!pip_packages_needed[@]}"; do
   py_package=$key
