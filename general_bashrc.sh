@@ -124,3 +124,7 @@ else
     export NODE_PATH=/usr/lib/nodejs:/usr/share/nodejs
     source /usr/share/doc/fzf/examples/key-bindings.bash
 fi
+
+#Python 3 is the default
+alias python=python3
+alias pip=pip3

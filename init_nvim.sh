@@ -43,7 +43,6 @@ packages_needed['gcc']='gcc'
 packages_needed['cscope']='cscope'
 packages_needed['python3']='python3'
 packages_needed['rustc']='rustc'
-packages_needed['go']='golang-go'
 packages_needed['git']='git'
 packages_needed['nvim']='neovim'
 packages_needed['rg']='ripgrep'
@@ -59,7 +58,9 @@ then
   packages_needed['ag']='ag'
   packages_needed['yarn']='yarn'
   packages_needed['ctags']='ctags'
+  packages_needed['go']='go'
 else
+  packages_needed['go']='golang-go'
   packages_needed['ruby']='ruby-dev'
   packages_needed['pip3']='python3-pip'
   packages_needed['lua']='lua5.3'
@@ -76,6 +77,21 @@ for key in "${!packages_needed[@]}"; do
     package_install $package
   fi
 done
+
+if ! command -v pipx &> /dev/null
+then
+  if [ $("uname") == "Darwin" ]
+  then
+    brew install pipx
+    pipx ensurepath
+    sudo pipx ensurepath --global # optional to allow pipx actions with --global argument
+  else
+    sudo apt update
+    sudo apt install pipx
+    pipx ensurepath
+    sudo pipx ensurepath --global # optional to allow pipx actions with --global argument
+  fi
+fi
 
 if ! command -v solc &> /dev/null
 then
@@ -127,6 +143,30 @@ then
     $(brew --prefix)/opt/fzf/install
   fi
 fi
+
+declare -A pip_packages_needed
+# We install these packages if they are not already installed.
+# `pip_packages_needed` is a map of binary to package name in reverse order.
+if [ $("uname") == "Darwin" ]
+then
+  pip_packages_needed['numpy']='numpy'
+  pip_packages_needed['matplotlib']='python-matplotlib'
+  pip_packages_needed['scipy']='scipy'
+else
+  pip_packages_needed['numpy']='python3-numpy'
+  pip_packages_needed['matplotlib']='python3-matplotlib'
+  pip_packages_needed['scipy']='python3-scipy'
+  pip_packages_needed['sklearn']='python3-sklearn python3-sklearn-lib python-sklearn-doc'
+fi
+for key in "${!pip_packages_needed[@]}"; do
+  py_package=$key
+  package=${pip_packages_needed[$key]}
+  pip_out=`pip3 list | grep "$key"`
+  if [ -z "$pip_out" ]; then
+    echo "Installing Python's $package..."
+    package_install $package
+  fi
+done
 
 if [ ! -d "$HOME/src/configs" ]; then
   echo "Installing ~/src directory and configs repo"
