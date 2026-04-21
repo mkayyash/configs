@@ -125,6 +125,11 @@ else
     source /usr/share/doc/fzf/examples/key-bindings.bash
 fi
 
+alias ls='ls --color=auto'
+alias ll='ls -alFh --color=auto'
+alias la='ls -A --color=auto'
+alias l='ls -CF --color=auto'
+
 #Python 3 is the default
 alias python=python3
 alias pip=pip3
